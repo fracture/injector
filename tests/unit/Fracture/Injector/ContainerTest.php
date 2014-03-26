@@ -21,4 +21,21 @@ class ContainerTest extends PHPUnit_Framework_TestCase
         $container = new Container;
         $this->assertInstanceOf('Simple', $container->create('Simple'));
     }
+
+    /**
+     * @expectedException Fracture\Injector\MissingClassException
+     */
+    public function testMisingClass()
+    {
+        $container = new Container;
+        $container->create('Missing');
+    }
+
+
+    public function testWithSingleDependency()
+    {
+        $container = new Container;
+   //     $this->assertInstanceOf('Composed', $container->create('Composed'));
+    }
+
 }
