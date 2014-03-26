@@ -6,6 +6,7 @@ class Container
 {
     public function create($name)
     {
-
+        $instance = new $name;
+        return $instance;
     }
 }
