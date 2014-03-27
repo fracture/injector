@@ -35,7 +35,7 @@ class ContainerTest extends PHPUnit_Framework_TestCase
     public function testWithSingleDependency()
     {
         $container = new Container;
-   //     $this->assertInstanceOf('Composed', $container->create('Composed'));
+        $this->assertInstanceOf('Composed', $container->create('Composed'));
     }
 
 }
