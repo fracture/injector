@@ -14,10 +14,14 @@ class Inspector
         $this->cache = $cache;
     }
 
-    public function getRequirements($class);
+    public function getRequirements($class)
     {
         $reflection = new \ReflectionClass($class);
         $constructor = $reflection->getConstructor();
+        $parameters = $constructor->getParameters();
+        foreach ($parameters as $item) {
+
+        }
     }
 
 }

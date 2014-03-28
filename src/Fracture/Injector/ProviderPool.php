@@ -2,7 +2,7 @@
 
 namespace Fracture\Injector;
 
-class ProvideerPool
+class ProviderPool
 {
 
 }

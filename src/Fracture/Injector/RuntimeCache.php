@@ -9,7 +9,7 @@ class RuntimeCache implements ReflectionCache
 
     public function hasClass($name)
     {
-        return array_key_exists($name, $this->pool)
+        return array_key_exists($name, $this->pool);
     }
 
 

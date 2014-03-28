@@ -10,7 +10,7 @@ class Container
 
     public function __construct($inspector, $pool)
     {
-        $this->inspector = $instance;
+        $this->inspector = $inspector;
         $this->pool = $pool;
     }
 
@@ -29,7 +29,7 @@ class Container
         $stack[] = $class;
 
         $requirements = $this->inspector->getRequirements($class);
-        $dependencies = $this->produceDependencies($requirements, $stack);
+        $dependencies = $this->produceDependencies($requirements);
 
         return (new ReflectionClass($class))->newInstanceArgs($dependencies);
     }
