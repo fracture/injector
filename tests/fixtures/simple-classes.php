@@ -1,5 +1,8 @@
 <?php
 
+
+define('TEST_CONSTANT', 'lorem ipsum');
+
 class Basic
 {
 
@@ -31,6 +34,24 @@ class SimpleWithDefault
 
     }
 }
+
+class SimpleWithConstantAsDefault
+{
+    public function __construct($param = TEST_CONSTANT)
+    {
+
+    }
+}
+
+
+class SimpleWithMixedParams
+{
+    public function __construct(array $alpha, $beta, $gamma = 'foobar')
+    {
+
+    }
+}
+
 
 
 class ExtendsSimpleWithDefault extends SimpleWithDefault
