@@ -41,16 +41,18 @@ class Inspector
 
     private function inspectParameter($parameter)
     {
-        $data = [];
+        $data = ['type' => 'parameter'];
 
         if ($parameter->isDefaultValueAvailable()) {
             $data['default'] = $parameter->getDefaultValue();
         }
 
         $class = $parameter->getClass();
-        $data['type'] = null === $class
-                            ? 'parameter'
-                            : 'instance';
+
+        if (null !== $class) {
+            $data['type'] = 'instance';
+            $data['class'] = $class->getName();
+        }
 
         return $data;
     }

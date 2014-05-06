@@ -3,6 +3,7 @@
 
 define('TEST_CONSTANT', 'lorem ipsum');
 
+
 class Basic
 {
 
@@ -60,7 +61,8 @@ class ExtendsSimpleWithDefault extends SimpleWithDefault
 }
 
 
-class PrimitiveComposite
+
+class BasicComposite
 {
     public function __construct(Basic $dependency)
     {
@@ -69,7 +71,8 @@ class PrimitiveComposite
 }
 
 
-class DefaultableComposite
+
+class BasicCompositeWithDefault
 {
     public function __construct(Basic $dependency = null)
     {
