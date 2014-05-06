@@ -6,12 +6,27 @@ class Basic
 }
 
 
+class SimpleEmpty
+{
+    public function __construct()
+    {
+
+    }
+}
+
+
 class SimpleWithDefault
 {
     public function __construct($param = 'foobar')
     {
 
     }
+}
+
+
+class ExtendsSimpleWithDefault extends SimpleWithDefault
+{
+
 }
 
 

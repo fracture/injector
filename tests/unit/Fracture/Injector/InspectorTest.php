@@ -22,6 +22,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
 
         $instance = new Inspector($cache);
         $this->assertEquals([], $instance->getRequirements('Basic'));
+        $this->assertEquals([], $instance->getRequirements('SimpleEmpty'));
     }
 
 
@@ -38,5 +39,6 @@ class InspectorTest extends PHPUnit_Framework_TestCase
 
         $instance = new Inspector($cache);
         $this->assertEquals($expected, $instance->getRequirements('SimpleWithDefault'));
+        $this->assertEquals($expected, $instance->getRequirements('ExtendsSimpleWithDefault'));
     }
 }
