@@ -16,16 +16,43 @@ class Inspector
 
     public function getRequirements($class)
     {
-        $requirements = [];
-
+        $parameters = [];
         $reflection = new \ReflectionClass($class);
         $constructor = $reflection->getConstructor();
+
         if (null !== $constructor) {
             $parameters = $constructor->getParameters();
-            foreach ($parameters as $item) {
-                var_dump($item->getClass());
-            }
         }
+
+        return $this->collectParameterDetails($parameters);
+    }
+
+
+    private function collectParameterDetails($parameters)
+    {
+        $requirements = [];
+
+        foreach ($parameters as $item) {
+            $requirements[$item->getName()] = $this->inspectParameter($item);
+        }
+
         return $requirements;
     }
+
+    private function inspectParameter($parameter)
+    {
+        $data = [];
+
+        if ($parameter->isDefaultValueAvailable()) {
+            $data['default'] = $parameter->getDefaultValue();
+        }
+
+        $class = $parameter->getClass();
+        $data['type'] = null === $class
+                            ? 'parameter'
+                            : 'instance';
+
+        return $data;
+    }
+
 }

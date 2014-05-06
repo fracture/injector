@@ -6,9 +6,9 @@ class Basic
 }
 
 
-class Simple
+class SimpleWithDefault
 {
-    public function __construct($param = 'default')
+    public function __construct($param = 'foobar')
     {
 
     }
