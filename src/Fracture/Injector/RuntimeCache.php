@@ -17,5 +17,4 @@ class RuntimeCache implements ReflectionCache
     {
         $this->pool[$name] = $parameters;
     }
-
 }
