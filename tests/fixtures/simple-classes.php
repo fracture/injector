@@ -1,14 +1,32 @@
 <?php
 
-class Simple
+class Basic
 {
 
 }
 
 
-class Composed
+class Simple
 {
-    public function __construct(Simple $dependency)
+    public function __construct($param = 'default')
+    {
+
+    }
+}
+
+
+class PrimitiveComposite
+{
+    public function __construct(Basic $dependency)
+    {
+
+    }
+}
+
+
+class DefaultableComposite
+{
+    public function __construct(Basic $dependency = null)
     {
 
     }

@@ -16,12 +16,16 @@ class Inspector
 
     public function getRequirements($class)
     {
+        $requirements = [];
+
         $reflection = new \ReflectionClass($class);
         $constructor = $reflection->getConstructor();
-        $parameters = $constructor->getParameters();
-        foreach ($parameters as $item) {
-
+        if (null !== $constructor) {
+            $parameters = $constructor->getParameters();
+            foreach ($parameters as $item) {
+                var_dump($item->getClass());
+            }
         }
+        return $requirements;
     }
-
 }
