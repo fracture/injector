@@ -50,8 +50,12 @@ class Inspector
         $class = $parameter->getClass();
 
         if (null !== $class) {
-            $data['type'] = 'instance';
-            $data['class'] = $class->getName();
+
+            $data['type'] = $class->isInterface()
+                                ? 'interface'
+                                : 'class';
+
+            $data['name'] = $class->getName();
         }
 
         return $data;

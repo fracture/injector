@@ -4,78 +4,59 @@
 define('TEST_CONSTANT', 'lorem ipsum');
 
 
-class Basic
-{
-
-}
+class Basic{}
 
 
 class SimpleEmpty
 {
-    public function __construct()
-    {
-
-    }
+    public function __construct() {}
 }
 
 
 class Simple
 {
-    public function __construct($configured)
-    {
-
-    }
+    public function __construct($alpha) {}
 }
 
 
 class SimpleWithDefault
 {
-    public function __construct($param = 'foobar')
-    {
-
-    }
+    public function __construct($alpha = 'foobar') {}
 }
+
 
 class SimpleWithConstantAsDefault
 {
-    public function __construct($param = TEST_CONSTANT)
-    {
-
-    }
+    public function __construct($alpha = TEST_CONSTANT) {}
 }
 
 
 class SimpleWithMixedParams
 {
-    public function __construct(array $alpha, $beta, $gamma = 'foobar')
-    {
-
-    }
+    public function __construct(array $alpha, $beta, $gamma = 'foobar') {}
 }
 
 
-
-class ExtendsSimpleWithDefault extends SimpleWithDefault
-{
-
-}
-
+class ExtendsSimpleWithDefault extends SimpleWithDefault {}
 
 
 class BasicComposite
 {
-    public function __construct(Basic $dependency)
-    {
-
-    }
+    public function __construct(Basic $alpha) {}
 }
 
 
+interface SomeInterface{}
 
-class BasicCompositeWithDefault
+
+class CompsoteWithInterfaceDependency
 {
-    public function __construct(Basic $dependency = null)
-    {
-
-    }
+    public function __construct(SomeInterface $alpha) {}
 }
+
+
+class BasicCompositeWithStuff
+{
+    public function __construct($alpha, array $beta = [], Simple $gamma = null, SomeInterface $delta = null) {}
+}
+

@@ -29,7 +29,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
     public function testSimpleClass()
     {
         $expected = [
-            'configured' => [
+            'alpha' => [
                 'type'    => 'parameter',
             ],
         ];
@@ -44,7 +44,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
     public function testClassWithDefaultInConstructor()
     {
         $expected = [
-            'param' => [
+            'alpha' => [
                 'type'    => 'parameter',
                 'default' => 'foobar',
             ],
@@ -61,7 +61,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
     public function testClassWithDefaultConstantInConstructor()
     {
         $expected = [
-            'param' => [
+            'alpha' => [
                 'type'    => 'parameter',
                 'default' => TEST_CONSTANT,
             ],
@@ -101,9 +101,9 @@ class InspectorTest extends PHPUnit_Framework_TestCase
     public function testCompositeClass()
     {
         $expected = [
-            'dependency' => [
-                'type'    => 'instance',
-                'class'   => 'Basic',
+            'alpha' => [
+                'type'    => 'class',
+                'name'    => 'Basic',
             ],
         ];
 
@@ -113,5 +113,49 @@ class InspectorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $instance->getRequirements('BasicComposite'));
     }
 
+
+    public function testCompositeWithInterface()
+    {
+        $expected = [
+            'alpha' => [
+                'type'    => 'interface',
+                'name'    => 'SomeInterface',
+            ],
+        ];
+
+        $cache = $this->getMock('Fracture\Injector\ReflectionCache');
+
+        $instance = new Inspector($cache);
+        $this->assertEquals($expected, $instance->getRequirements('CompsoteWithInterfaceDependency'));
+    }
+
+
+    public function testCompositeWithVariousDependencies()
+    {
+        $expected = [
+            'alpha' => [
+                'type'    => 'parameter',
+            ],
+            'beta' => [
+                'type'    => 'parameter',
+                'default' => [],
+            ],
+            'gamma' => [
+                'type'    => 'class',
+                'name'    => 'Simple',
+                'default' => null,
+            ],
+            'delta' => [
+                'type'    => 'interface',
+                'name'    => 'SomeInterface',
+                'default' => null,
+            ],
+        ];
+
+        $cache = $this->getMock('Fracture\Injector\ReflectionCache');
+
+        $instance = new Inspector($cache);
+        $this->assertEquals($expected, $instance->getRequirements('BasicCompositeWithStuff'));
+    }
 
 }
