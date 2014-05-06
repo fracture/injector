@@ -26,6 +26,21 @@ class InspectorTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testSimpleClass()
+    {
+        $expected = [
+            'configured' => [
+                'type'    => 'parameter',
+            ],
+        ];
+
+        $cache = $this->getMock('Fracture\Injector\ReflectionCache');
+
+        $instance = new Inspector($cache);
+        $this->assertEquals($expected, $instance->getRequirements('Simple'));
+    }
+
+
     public function testClassWithDefaultInConstructor()
     {
         $expected = [

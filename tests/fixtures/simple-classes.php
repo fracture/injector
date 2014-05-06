@@ -15,6 +15,15 @@ class SimpleEmpty
 }
 
 
+class Simple
+{
+    public function __construct($configured)
+    {
+
+    }
+}
+
+
 class SimpleWithDefault
 {
     public function __construct($param = 'foobar')
