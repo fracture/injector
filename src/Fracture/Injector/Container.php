@@ -29,9 +29,9 @@ class Container
         $stack[] = $class;
 
         $requirements = $this->inspector->getRequirements($class);
-        $dependencies = $this->produceDependencies($requirements);
+        $dependencies = $this->produceDependencies($requirements, $stack);
 
-        return (new ReflectionClass($class))->newInstanceArgs($dependencies);
+        return (new \ReflectionClass($class))->newInstanceArgs($dependencies);
     }
 
 
