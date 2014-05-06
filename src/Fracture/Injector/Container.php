@@ -38,7 +38,7 @@ class Container
     private function produceDependencies($requirements, array $stack)
     {
         $dependencies = [];
-        foreach ($requirements as $type => $parameters) {
+        foreach ($requirements as $name => $parameters) {
             $dependencies[] = $this->buildInstance($name, $stack);
         }
         return $dependencies;
