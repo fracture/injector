@@ -13,6 +13,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         require_once FIXTURE_PATH . '/simple-classes.php';
+        require_once FIXTURE_PATH . '/namespaced-classes.php';
     }
 
 
@@ -157,5 +158,48 @@ class InspectorTest extends PHPUnit_Framework_TestCase
         $instance = new Inspector($cache);
         $this->assertEquals($expected, $instance->getRequirements('BasicCompositeWithStuff'));
     }
+
+
+    public function testSimpleNamespacedClass()
+    {
+        $cache = $this->getMock('Fracture\Injector\ReflectionCache');
+
+        $instance = new Inspector($cache);
+        $this->assertEquals([], $instance->getRequirements('\\Foobar\\First'));
+    }
+
+
+    public function testNamespacedClassWithDependencyFromSameNamespace()
+    {
+        $expected = [
+            'alpha' => [
+                'type'    => 'class',
+                'name'    => 'Foobar\\First',
+            ],
+        ];
+
+        $cache = $this->getMock('Fracture\Injector\ReflectionCache');
+
+        $instance = new Inspector($cache);
+        $this->assertEquals($expected, $instance->getRequirements('\\FooBar\\Second'));
+    }
+
+
+    public function testNamespacedClassWithDependencyFromGlobalNamespace()
+    {
+        $expected = [
+            'alpha' => [
+                'type'    => 'class',
+                'name'    => 'BasicComposite',
+                'default' => null,
+            ],
+        ];
+
+        $cache = $this->getMock('Fracture\Injector\ReflectionCache');
+
+        $instance = new Inspector($cache);
+        $this->assertEquals($expected, $instance->getRequirements('\\FooBar\\Third'));
+    }
+
 
 }
