@@ -14,6 +14,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
     {
         require_once FIXTURE_PATH . '/simple-classes.php';
         require_once FIXTURE_PATH . '/namespaced-classes.php';
+        require_once FIXTURE_PATH . '/subnamespaced-classes.php';
     }
 
 
@@ -181,7 +182,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
         $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
 
         $instance = new Inspector($cache);
-        $this->assertEquals($expected, $instance->getRequirements('\\FooBar\\Second'));
+        $this->assertEquals($expected, $instance->getRequirements('\\Foobar\\Second'));
     }
 
 
@@ -198,7 +199,27 @@ class InspectorTest extends PHPUnit_Framework_TestCase
         $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
 
         $instance = new Inspector($cache);
-        $this->assertEquals($expected, $instance->getRequirements('\\FooBar\\Third'));
+        $this->assertEquals($expected, $instance->getRequirements('\\Foobar\\Third'));
+    }
+
+
+    public function testNamespacedClassWithDependencyInDifferentNamespace()
+    {
+        $expected = [
+            'alpha' => [
+                'type'    => 'class',
+                'name'    => '\\Foobar\\Second',
+            ],
+            'beta' => [
+                'type'    => 'class',
+                'name'    => '\\BasicComposite',
+            ],
+        ];
+
+        $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
+
+        $instance = new Inspector($cache);
+        $this->assertEquals($expected, $instance->getRequirements('\\Lorem\\Ipsum\\Dolor'));
     }
 
 

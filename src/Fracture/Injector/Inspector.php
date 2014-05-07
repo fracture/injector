@@ -55,7 +55,7 @@ class Inspector
                                 ? 'interface'
                                 : 'class';
 
-            $data['name'] = $class->getName();
+            $data['name'] = '\\' . $class->getName();
         }
 
         return $data;
