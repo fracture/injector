@@ -60,5 +60,4 @@ class Inspector
 
         return $data;
     }
-
 }

@@ -221,6 +221,4 @@ class InspectorTest extends PHPUnit_Framework_TestCase
         $instance = new Inspector($cache);
         $this->assertEquals($expected, $instance->getRequirements('\\Lorem\\Ipsum\\Dolor'));
     }
-
-
 }
