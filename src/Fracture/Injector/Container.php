@@ -5,42 +5,28 @@ namespace Fracture\Injector;
 class Container
 {
 
-    private $instance;
-    private $pool;
+    private $smith;
+    private $cache;
 
-    public function __construct($inspector, $pool)
+    public function __construct($smith, $cache = null)
     {
-        $this->inspector = $inspector;
-        $this->pool = $pool;
+        $this->smith = $smith;
+        $this->cache = $cache;
     }
 
 
-    public function create($class)
+    public function create($name)
     {
-        return $this->buildInstance($class, []);
-    }
-
-    private function buildInstance($class, array $stack)
-    {
-        if (in_array($class, $stack)) {
-            throw new CyclicDependencyException;
+        if ($this->cache && $this->cache->has($name)) {
+            return $this->cache->get($name);
         }
 
-        $stack[] = $class;
+        $instance = $this->smith->forge($name);
 
-        $requirements = $this->inspector->getRequirements($class);
-        $dependencies = $this->produceDependencies($requirements, $stack);
-
-        return (new \ReflectionClass($class))->newInstanceArgs($dependencies);
-    }
-
-
-    private function produceDependencies($requirements, array $stack)
-    {
-        $dependencies = [];
-        foreach ($requirements as $name => $parameters) {
-            $dependencies[] = $this->buildInstance($name, $stack);
+        if ($this->cache && $this->cache->expecting($name)) {
+            $this->cache->set($instance);
         }
-        return $dependencies;
+
+        return $instance;
     }
 }
