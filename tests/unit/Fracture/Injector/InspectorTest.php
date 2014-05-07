@@ -20,9 +20,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
 
     public function testClassWithoutConstructor()
     {
-        $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
-
-        $instance = new Inspector($cache);
+        $instance = new Inspector;
         $this->assertEquals([], $instance->getRequirements('\\Basic'));
         $this->assertEquals([], $instance->getRequirements('\\SimpleEmpty'));
     }
@@ -36,9 +34,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
-
-        $instance = new Inspector($cache);
+        $instance = new Inspector;
         $this->assertEquals($expected, $instance->getRequirements('\\Simple'));
     }
 
@@ -52,9 +48,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
-
-        $instance = new Inspector($cache);
+        $instance = new Inspector;
         $this->assertEquals($expected, $instance->getRequirements('\\SimpleWithDefault'));
         $this->assertEquals($expected, $instance->getRequirements('\\ExtendsSimpleWithDefault'));
     }
@@ -69,9 +63,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
-
-        $instance = new Inspector($cache);
+        $instance = new Inspector;
         $this->assertEquals($expected, $instance->getRequirements('\\SimpleWithConstantAsDefault'));
     }
 
@@ -92,9 +84,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
         ];
 
 
-        $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
-
-        $instance = new Inspector($cache);
+        $instance = new Inspector;
         $this->assertEquals($expected, $instance->getRequirements('\\SimpleWithMixedParams'));
     }
 
@@ -109,9 +99,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
-
-        $instance = new Inspector($cache);
+        $instance = new Inspector;
         $this->assertEquals($expected, $instance->getRequirements('\\BasicComposite'));
     }
 
@@ -125,9 +113,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
-
-        $instance = new Inspector($cache);
+        $instance = new Inspector;
         $this->assertEquals($expected, $instance->getRequirements('\\CompsoteWithInterfaceDependency'));
     }
 
@@ -154,18 +140,14 @@ class InspectorTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
-
-        $instance = new Inspector($cache);
+        $instance = new Inspector;
         $this->assertEquals($expected, $instance->getRequirements('\\BasicCompositeWithStuff'));
     }
 
 
     public function testSimpleNamespacedClass()
     {
-        $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
-
-        $instance = new Inspector($cache);
+        $instance = new Inspector;
         $this->assertEquals([], $instance->getRequirements('\\Foobar\\First'));
     }
 
@@ -179,9 +161,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
-
-        $instance = new Inspector($cache);
+        $instance = new Inspector;
         $this->assertEquals($expected, $instance->getRequirements('\\Foobar\\Second'));
     }
 
@@ -196,9 +176,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
-
-        $instance = new Inspector($cache);
+        $instance = new Inspector;
         $this->assertEquals($expected, $instance->getRequirements('\\Foobar\\Third'));
     }
 
@@ -216,9 +194,7 @@ class InspectorTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $cache = $this->getMock('Fracture\\Injector\\ReflectionCache');
-
-        $instance = new Inspector($cache);
+        $instance = new Inspector;
         $this->assertEquals($expected, $instance->getRequirements('\\Lorem\\Ipsum\\Dolor'));
     }
 }
