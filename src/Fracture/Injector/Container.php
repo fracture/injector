@@ -8,7 +8,7 @@ class Container
     private $smith;
     private $cache;
 
-    public function __construct($smith, $cache = null)
+    public function __construct(Maker $smith, $cache = null)
     {
         $this->smith = $smith;
         $this->cache = $cache;
