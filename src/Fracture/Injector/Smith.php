@@ -2,11 +2,24 @@
 
 namespace Fracture\Injector;
 
-abstract class Smith implements Maker
+class Smith implements Maker
 {
+
+    private $pool;
+    private $inspector;
+    private $configuration;
+
+    public function __construct($pool, $inspector, $configuration)
+    {
+        $this->pool = $pool;
+        $this->inspector = $inspector;
+        $this->configuration = $configuration;
+    }
+
+
     public function build($name)
     {
-        if ($this->pool->has($name)) {
+        if ($this->pool && $this->pool->has($name)) {
             return $this->pool->produce($name);
         }
 
@@ -21,5 +34,9 @@ abstract class Smith implements Maker
         return $reflection->newInstanceArgs($parameters);
     }
 
-    abstract public function getParameters($name);
+    public function getParameters($name)
+    {
+        $blueprint = $this->assembleBlueprint();
+        return $this->buildParameterList($blueprint);
+    }
 }

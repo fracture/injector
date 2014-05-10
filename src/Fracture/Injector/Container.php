@@ -5,27 +5,23 @@ namespace Fracture\Injector;
 class Container
 {
 
-    private $smith;
+    private $inspector;
+    private $engineer;
     private $cache;
 
-    public function __construct(Maker $smith, $cache = null)
+    public function __construct($inspector, $engineer, $smith)
     {
+        $this->inspector = $inspector;
+        $this->engineer = $engineer;
         $this->smith = $smith;
-        $this->cache = $cache;
     }
 
 
     public function create($name)
     {
-        if ($this->cache && $this->cache->has($name)) {
-            return $this->cache->get($name);
-        }
-
-        $instance = $this->smith->forge($name);
-
-        if ($this->cache && $this->cache->expecting($name)) {
-            $this->cache->set($instance);
-        }
+        $requirements = $this->inspector->getRequirements($name);
+        $blueprint = $this->engineer->getBlueprint($name, $requirements);
+        $instance = $this->smith->forge($name, $blueprint);
 
         return $instance;
     }
