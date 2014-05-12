@@ -5,27 +5,29 @@ namespace Fracture\Injector;
 class Engineer
 {
 
+    private $configuration;
+
+
+    public function __construct($configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
 
     public function getBlueprint($name, array $requirements = [])
     {
         $blueprint = $requirements;
-
-        if ($this->cache && $this->cache->has($name, 'blueprint')) {
-            return $this->cache->get($name, 'blueprint');
-        }
 
         if ($this->configuration->has($name)) {
             $settings =  $this->configuration->get($name);
             $blueprint = $this->produceBlueprint($requirements, $settings);
         }
 
-        $this->cache->set($name, 'blueprint', $blueprint);
-
         return $blueprint;
     }
 
 
-    public function produceBlueprint($requirements, $settings)
+    private function produceBlueprint($requirements, $settings)
     {
         $blueprint = $settings;
 
