@@ -5,6 +5,115 @@ namespace Fracture\Injector;
 class Inspector
 {
 
+    private $builder;
+
+    public function __construct($builder)
+    {
+        $this->builder = $builder;
+    }
+
+
+    private function createMap()
+    {
+        return $this->builder->create();
+    }
+
+
+    public function getRequirements($name)
+    {
+        $dependencies = $this->createMap();
+        $this->analize($name, $dependencies);
+        return $dependencies;
+    }
+
+
+    private function analize($name, $dependencies)
+    {
+        $parameters = [];
+        $class = new \ReflectionClass($name);
+        $constructor = $class->getConstructor();
+
+        if (null !== $constructor) {
+            $parameters = $constructor->getParameters();
+        }
+
+        return $this->collectParameterDetails($parameters, $dependencies);
+    }
+
+
+    private function collectParameterDetails($parameters, $dependencies)
+    {
+        foreach ($parameters as $item) {
+            $dependencies->defineRequirement($item->getName(), $this->inspectParameter($item));
+        }
+
+        return $requirements;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function getRequirements($class)
     {
         $parameters = [];
