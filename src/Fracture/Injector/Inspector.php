@@ -13,119 +13,28 @@ class Inspector
     }
 
 
-    private function createMap()
+    public function getBlueprint($name)
     {
-        return $this->builder->create();
+        $blueprint = $this->builder->create($name);
+        $this->analize($blueprint);
+
+        return $blueprint;
     }
 
 
-    public function getRequirements($name)
+    private function analize($requirement)
     {
-        $dependencies = $this->createMap();
-        $this->analize($name, $dependencies);
-        return $dependencies;
-    }
+        $dependencies = $requirement->getDependencies();
 
-
-    private function analize($name, $dependencies)
-    {
-        $parameters = [];
-        $class = new \ReflectionClass($name);
-        $constructor = $class->getConstructor();
-
-        if (null !== $constructor) {
-            $parameters = $constructor->getParameters();
+        foreach ($dependencies as $dependency) {
+            if ($dependency->isObject()) {
+                $this->analize($dependency);
+            }
         }
 
-        return $this->collectParameterDetails($parameters, $dependencies);
+        return $requirement;
     }
 
-
-    private function collectParameterDetails($parameters, $dependencies)
-    {
-        foreach ($parameters as $item) {
-            $dependencies->defineRequirement($item->getName(), $this->inspectParameter($item));
-        }
-
-        return $requirements;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function getRequirements($class)
-    {
-        $parameters = [];
-        $reflection = new \ReflectionClass($class);
-        $constructor = $reflection->getConstructor();
-
-        if (null !== $constructor) {
-            $parameters = $constructor->getParameters();
-        }
-
-        return $this->collectParameterDetails($parameters);
-    }
 
 
     private function collectParameterDetails($parameters)

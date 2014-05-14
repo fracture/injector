@@ -19,7 +19,13 @@ class Container
 
     public function create($name)
     {
-        $requirements = $this->inspector->getRequirements($name);
+
+
+        $blueprint = $this->inspector->getBlueprint($name);
+
+
+
+
         $blueprint = $this->engineer->getBlueprint($name, $requirements);
         $instance = $this->smith->forge($name, $blueprint);
 
