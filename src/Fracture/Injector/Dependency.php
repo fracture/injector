@@ -50,6 +50,8 @@ class Dependency
         return $this->dependencies;
     }
 
+
+
     public function initialize()
     {
         $symbol = new \ReflectionClass($this->name);
@@ -100,7 +102,7 @@ class Dependency
     private function applyContext($context)
     {
         if ($context->isDefaultValueAvailable()) {
-            $this->setDefaultValue($context->getDefaultValue())
+            $this->setDefaultValue($context->getDefaultValue());
             return;
         }
 
@@ -119,7 +121,7 @@ class Dependency
 
     public function isConcrete()
     {
-        return $this->isObject() && !($symbol->isInterface() || $symbol->isAbstract() || $symbol->isTrait())
+        return $this->isObject() && !($symbol->isInterface() || $symbol->isAbstract() || $symbol->isTrait());
     }
 
 
