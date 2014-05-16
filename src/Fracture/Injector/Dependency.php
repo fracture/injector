@@ -45,6 +45,11 @@ class Dependency
     }
 
 
+    public function hasDependencies()
+    {
+        return count($this->dependencies) > 0;
+    }
+
     public function getDependencies()
     {
         return $this->dependencies;
@@ -52,17 +57,35 @@ class Dependency
 
 
 
-    public function initialize()
+    public function prepare()
     {
         $symbol = new \ReflectionClass($this->name);
+        if ($this->isSymbolConcrete($symbol)) {
+            $this->dependencies = $this->initialize($symbol);
+        }
+    }
+
+
+    public function isSymbolConcrete($symbol)
+    {
+        return !($symbol->isInterface() || $symbol->isAbstract() || $symbol->isTrait());
+    }
+
+
+    /**
+     * @param \ReflectionClass $symbol
+     * @return \ReflectionParameter[]
+     */
+    private function initialize($symbol)
+    {
         $constructor = $symbol->getConstructor();
 
         if (null === $constructor) {
-            return null;
+            return [];
         }
 
         $parameters = $constructor->getParameters();
-        $this->dependencies = $this->collectDependencies($parameters);
+        return $this->collectDependencies($parameters);
     }
 
 
@@ -71,14 +94,17 @@ class Dependency
         $dependencies = [];
 
         foreach ($parameters as $parameter) {
-            $dependencies[] = $this->analyze($parameter);
+            $dependencies[] = $this->analyse($parameter);
         }
 
         return $dependencies;
     }
 
 
-    private function analize($parameter)
+    /**
+     * @param \ReflectionParameter $parameter
+     */
+    private function analyse(\ReflectionParameter $parameter)
     {
         $dependency = new Dependency($parameter->getClass());
 
@@ -90,15 +116,12 @@ class Dependency
     }
 
 
-    public function prepare()
-    {
-        $symbol = new \ReflectionClass($this->name);
-        if ($symbol->isConcrete()) {
-            $this->initialize();
-        }
-    }
 
 
+
+    /**
+     * @param \ReflectionParameter $context
+     */
     private function applyContext($context)
     {
         if ($context->isDefaultValueAvailable()) {
@@ -110,18 +133,6 @@ class Dependency
             $this->needsCallable = true;
             return;
         }
-
-        if (!$symbol->isConcrete()) {
-            $this->needsValue = true;
-            return;
-        }
-
-    }
-
-
-    public function isConcrete()
-    {
-        return $this->isObject() && !($symbol->isInterface() || $symbol->isAbstract() || $symbol->isTrait());
     }
 
 
