@@ -13,7 +13,7 @@ class Dependency
 
     private $dependencies = [];
 
-    private $needsValue = false;
+    private $hasDefault = false;
 
     private $needsCallable = false;
 
@@ -47,9 +47,9 @@ class Dependency
     }
 
 
-    public function needsValue()
+    public function hasDefaultValue()
     {
-        return $this->needsValue;
+        return $this->hasDefault;
     }
 
 
@@ -63,6 +63,7 @@ class Dependency
     {
         return count($this->dependencies) > 0;
     }
+
 
     public function getDependencies()
     {
@@ -162,7 +163,7 @@ class Dependency
 
     private function setDefaultValue($value)
     {
-        $this->needsValue = false;
+        $this->hasDefault = true;
         $this->default = $value;
     }
 }

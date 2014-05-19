@@ -46,6 +46,12 @@ class BasicComposite
 }
 
 
+class BasicCompositeWitDefault
+{
+    public function __construct(Basic $alpha = null) {}
+}
+
+
 class BasicMultiComposite
 {
     public function __construct(Basic $alpha, Basic $beta) {}
