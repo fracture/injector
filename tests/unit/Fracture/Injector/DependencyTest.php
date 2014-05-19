@@ -27,6 +27,14 @@ class DependencyTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testConcreteValidation()
+    {
+        $instance = new Dependency;
+        $this->assertTrue($instance->isSymbolConcrete(new \ReflectionClass('Basic')));
+        $this->assertFalse($instance->isSymbolConcrete(new \ReflectionClass('SomeInterface')));
+    }
+
+
     public function testBasicClass()
     {
         $instance = new Dependency('Basic');
@@ -42,5 +50,25 @@ class DependencyTest extends PHPUnit_Framework_TestCase
         $instance->prepare();
 
         $this->assertTrue($instance->hasDependencies());
+    }
+
+
+    public function testDependenciesAreArray()
+    {
+        $instance = new Dependency('Simple');
+        $instance->prepare();
+
+        $dependencies = $instance->getDependencies();
+        $this->assertInternalType('array', $dependencies);
+    }
+
+
+    public function testDependenciesContainDependencies()
+    {
+        $instance = new Dependency('BasicMultiComposite');
+        $instance->prepare();
+
+        $dependencies = $instance->getDependencies();
+        $this->assertContainsOnlyInstancesOf('\\Fracture\\Injector\\Dependency', $dependencies);
     }
 }

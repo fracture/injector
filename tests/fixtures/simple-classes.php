@@ -46,6 +46,12 @@ class BasicComposite
 }
 
 
+class BasicMultiComposite
+{
+    public function __construct(Basic $alpha, Basic $beta) {}
+}
+
+
 interface SomeInterface{}
 
 

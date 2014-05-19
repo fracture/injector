@@ -15,7 +15,7 @@ class Dependency
 
     private $dependencies = [];
 
-    public function __construct($name)
+    public function __construct($name = null)
     {
         $this->name = $name;
     }
@@ -113,6 +113,7 @@ class Dependency
         }
 
         $dependency->applyContext($parameter);
+        return $dependency;
     }
 
 
