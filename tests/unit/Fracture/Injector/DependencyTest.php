@@ -17,19 +17,19 @@ class DependencyTest extends PHPUnit_Framework_TestCase
 
     public function testUninitializedDependency()
     {
-        $instance = new Dependency('Basic');
+        $instance = new Dependency('foobar', 'Basic');
         $this->assertTrue($instance->isObject());
-        $this->assertEquals('Basic', $instance->getName());
+        $this->assertEquals('Basic', $instance->getType());
 
-        $instance = new Dependency(null);
+        $instance = new Dependency('foobar', null);
         $this->assertFalse($instance->isObject());
-        $this->assertNull($instance->getName());
+        $this->assertNull($instance->getType());
     }
 
 
     public function testConcreteValidation()
     {
-        $instance = new Dependency;
+        $instance = new Dependency('foobar');
         $this->assertTrue($instance->isSymbolConcrete(new \ReflectionClass('Basic')));
         $this->assertFalse($instance->isSymbolConcrete(new \ReflectionClass('SomeInterface')));
     }
@@ -37,7 +37,7 @@ class DependencyTest extends PHPUnit_Framework_TestCase
 
     public function testBasicClass()
     {
-        $instance = new Dependency('Basic');
+        $instance = new Dependency('foobar', 'Basic');
         $instance->prepare();
 
         $this->assertFalse($instance->hasDependencies());
@@ -46,7 +46,7 @@ class DependencyTest extends PHPUnit_Framework_TestCase
 
     public function testSimpleClass()
     {
-        $instance = new Dependency('Simple');
+        $instance = new Dependency('foobar', 'Simple');
         $instance->prepare();
 
         $this->assertTrue($instance->hasDependencies());
@@ -55,7 +55,7 @@ class DependencyTest extends PHPUnit_Framework_TestCase
 
     public function testDependenciesAreArray()
     {
-        $instance = new Dependency('Simple');
+        $instance = new Dependency('foobar', 'Simple');
         $instance->prepare();
 
         $dependencies = $instance->getDependencies();
@@ -63,9 +63,19 @@ class DependencyTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testDependenciesContainDependencies()
+    public function testDependenciesContainsConcreteDependencies()
     {
-        $instance = new Dependency('BasicMultiComposite');
+        $instance = new Dependency('foobar', 'BasicMultiComposite');
+        $instance->prepare();
+
+        $dependencies = $instance->getDependencies();
+        $this->assertContainsOnlyInstancesOf('\\Fracture\\Injector\\Dependency', $dependencies);
+    }
+
+
+    public function testDependenciesContainsParametersAsDependencies()
+    {
+        $instance = new Dependency('foobar', 'Simple');
         $instance->prepare();
 
         $dependencies = $instance->getDependencies();

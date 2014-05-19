@@ -7,6 +7,8 @@ class Dependency
 
     private $name;
 
+    private $type;
+
     private $default;
 
     private $needsCallable = false;
@@ -15,15 +17,22 @@ class Dependency
 
     private $dependencies = [];
 
-    public function __construct($name = null)
+    public function __construct($name, $type = null)
     {
         $this->name = $name;
+        $this->type = $type;
     }
 
 
     public function getName()
     {
         return $this->name;
+    }
+
+
+    public function getType()
+    {
+        return $this->type;
     }
 
 
@@ -59,7 +68,7 @@ class Dependency
 
     public function prepare()
     {
-        $symbol = new \ReflectionClass($this->name);
+        $symbol = new \ReflectionClass($this->type);
         if ($this->isSymbolConcrete($symbol)) {
             $this->dependencies = $this->initialize($symbol);
         }
@@ -117,9 +126,6 @@ class Dependency
     }
 
 
-
-
-
     /**
      * @param \ReflectionParameter $context
      */
@@ -139,7 +145,7 @@ class Dependency
 
     public function isObject()
     {
-        return null !== $this->name;
+        return null !== $this->type;
     }
 
 
