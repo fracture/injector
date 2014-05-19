@@ -7,20 +7,21 @@ class Dependency
 
     private $name;
 
-    private $type;
+    private $symbol;
 
     private $default;
 
-    private $needsCallable = false;
+    private $dependencies = [];
 
     private $needsValue = false;
 
-    private $dependencies = [];
+    private $needsCallable = false;
 
-    public function __construct($name, $type = null)
+
+    public function __construct($name, $symbol = null)
     {
         $this->name = $name;
-        $this->type = $type;
+        $this->symbol = $symbol;
     }
 
 
@@ -32,7 +33,11 @@ class Dependency
 
     public function getType()
     {
-        return $this->type;
+        if (null === $this->symbol) {
+            return null;
+        }
+
+        return $this->symbol->getName();
     }
 
 
@@ -68,16 +73,32 @@ class Dependency
 
     public function prepare()
     {
-        $symbol = new \ReflectionClass($this->type);
-        if ($this->isSymbolConcrete($symbol)) {
-            $this->dependencies = $this->initialize($symbol);
+        if (is_string($this->symbol)) {
+            $this->symbol = new \ReflectionClass($this->symbol);
+        }
+
+        $this->initialize();
+    }
+
+
+    private function initialize()
+    {
+        if ($this->isObject() && $this->isConcrete()) {
+            $parameters = $this->collectParameters($this->symbol);
+            $this->dependencies = $this->produceDependencies($parameters);
         }
     }
 
 
-    public function isSymbolConcrete($symbol)
+    public function isObject()
     {
-        return !($symbol->isInterface() || $symbol->isAbstract() || $symbol->isTrait());
+        return null !== $this->symbol;
+    }
+
+
+    public function isConcrete()
+    {
+        return !($this->symbol->isInterface() || $this->symbol->isAbstract() || $this->symbol->isTrait());
     }
 
 
@@ -85,7 +106,7 @@ class Dependency
      * @param \ReflectionClass $symbol
      * @return \ReflectionParameter[]
      */
-    private function initialize($symbol)
+    private function collectParameters($symbol)
     {
         $constructor = $symbol->getConstructor();
 
@@ -93,12 +114,11 @@ class Dependency
             return [];
         }
 
-        $parameters = $constructor->getParameters();
-        return $this->collectDependencies($parameters);
+        return $constructor->getParameters();
     }
 
 
-    private function collectDependencies($parameters)
+    private function produceDependencies($parameters)
     {
         $dependencies = [];
 
@@ -115,11 +135,8 @@ class Dependency
      */
     private function analyse(\ReflectionParameter $parameter)
     {
-        $dependency = new Dependency($parameter->getClass());
-
-        if ($dependency->isObject()) {
-            $dependency->prepare();
-        }
+        $dependency = new Dependency($parameter->getName(), $parameter->getClass());
+        $dependency->initialize();
 
         $dependency->applyContext($parameter);
         return $dependency;
@@ -140,12 +157,6 @@ class Dependency
             $this->needsCallable = true;
             return;
         }
-    }
-
-
-    public function isObject()
-    {
-        return null !== $this->type;
     }
 
 

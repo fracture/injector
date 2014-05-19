@@ -17,7 +17,7 @@ class DependencyTest extends PHPUnit_Framework_TestCase
 
     public function testUninitializedDependency()
     {
-        $instance = new Dependency('foobar', 'Basic');
+        $instance = new Dependency('foobar', new \ReflectionClass('Basic'));
         $this->assertTrue($instance->isObject());
         $this->assertEquals('Basic', $instance->getType());
 
@@ -29,9 +29,13 @@ class DependencyTest extends PHPUnit_Framework_TestCase
 
     public function testConcreteValidation()
     {
-        $instance = new Dependency('foobar');
-        $this->assertTrue($instance->isSymbolConcrete(new \ReflectionClass('Basic')));
-        $this->assertFalse($instance->isSymbolConcrete(new \ReflectionClass('SomeInterface')));
+        $instance = new Dependency('foobar', 'Basic');
+        $instance->prepare();
+        $this->assertTrue($instance->isConcrete());
+
+        $instance = new Dependency('foobar', 'SomeInterface');
+        $instance->prepare();
+        $this->assertFalse($instance->isConcrete());
     }
 
 
@@ -65,11 +69,18 @@ class DependencyTest extends PHPUnit_Framework_TestCase
 
     public function testDependenciesContainsConcreteDependencies()
     {
-        $instance = new Dependency('foobar', 'BasicMultiComposite');
+        $instance = new Dependency(null, 'BasicMultiComposite');
         $instance->prepare();
 
         $dependencies = $instance->getDependencies();
         $this->assertContainsOnlyInstancesOf('\\Fracture\\Injector\\Dependency', $dependencies);
+
+        $this->assertEquals('alpha', $dependencies[0]->getName());
+        $this->assertEquals('beta', $dependencies[1]->getName());
+
+        $this->assertEquals('Basic', $dependencies[0]->getType());
+        $this->assertEquals('Basic', $dependencies[1]->getType());
+
     }
 
 
