@@ -15,7 +15,7 @@ class Dependency
 
     private $hasDefault = false;
 
-    private $needsCallable = false;
+    private $isCallable = false;
 
 
     public function __construct($name, $symbol = null)
@@ -37,13 +37,13 @@ class Dependency
             return null;
         }
 
-        return $this->symbol->getName();
+        return '\\' . $this->symbol->getName();
     }
 
 
-    public function needsCallable()
+    public function isCallable()
     {
-        return $this->needsCallable;
+        return $this->isCallable;
     }
 
 
@@ -155,7 +155,7 @@ class Dependency
         }
 
         if ($context->isCallable()) {
-            $this->needsCallable = true;
+            $this->isCallable = true;
             return;
         }
     }

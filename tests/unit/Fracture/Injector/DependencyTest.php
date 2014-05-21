@@ -25,7 +25,7 @@ class DependencyTest extends PHPUnit_Framework_TestCase
     {
         $instance = new Dependency(null, new \ReflectionClass('Basic'));
         $this->assertTrue($instance->isObject());
-        $this->assertEquals('Basic', $instance->getType());
+        $this->assertEquals('\\Basic', $instance->getType());
 
         $instance = new Dependency(null, null);
         $this->assertFalse($instance->isObject());
@@ -43,7 +43,7 @@ class DependencyTest extends PHPUnit_Framework_TestCase
      */
     public function testConcreteValidation()
     {
-        $instance = new Dependency(null, 'Basic');
+        $instance = new Dependency(null, '\\Basic');
         $instance->prepare();
         $this->assertTrue($instance->isConcrete());
 
@@ -63,7 +63,7 @@ class DependencyTest extends PHPUnit_Framework_TestCase
      */
     public function testBasicClass()
     {
-        $instance = new Dependency(null, 'Basic');
+        $instance = new Dependency(null, '\\Basic');
         $instance->prepare();
 
         $this->assertFalse($instance->hasDependencies());
@@ -80,7 +80,7 @@ class DependencyTest extends PHPUnit_Framework_TestCase
      */
     public function testSimpleClass()
     {
-        $instance = new Dependency(null, 'Simple');
+        $instance = new Dependency(null, '\\Simple');
         $instance->prepare();
 
         $this->assertTrue($instance->hasDependencies());
@@ -99,7 +99,7 @@ class DependencyTest extends PHPUnit_Framework_TestCase
      */
     public function testDependenciesAreArray()
     {
-        $instance = new Dependency(null, 'Simple');
+        $instance = new Dependency(null, '\\Simple');
         $instance->prepare();
 
         $dependencies = $instance->getDependencies();
@@ -121,7 +121,7 @@ class DependencyTest extends PHPUnit_Framework_TestCase
      */
     public function testDependenciesContainsConcreteDependencies()
     {
-        $instance = new Dependency(null, 'BasicMultiComposite');
+        $instance = new Dependency(null, '\\BasicMultiComposite');
         $instance->prepare();
 
         $dependencies = $instance->getDependencies();
@@ -130,8 +130,8 @@ class DependencyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('alpha', $dependencies[0]->getName());
         $this->assertEquals('beta', $dependencies[1]->getName());
 
-        $this->assertEquals('Basic', $dependencies[0]->getType());
-        $this->assertEquals('Basic', $dependencies[1]->getType());
+        $this->assertEquals('\\Basic', $dependencies[0]->getType());
+        $this->assertEquals('\\Basic', $dependencies[1]->getType());
     }
 
 
@@ -147,7 +147,7 @@ class DependencyTest extends PHPUnit_Framework_TestCase
      */
     public function testDependenciesContainingParametersAsDependencies()
     {
-        $instance = new Dependency(null, 'Simple');
+        $instance = new Dependency(null, '\\Simple');
         $instance->prepare();
 
         $dependencies = $instance->getDependencies();
@@ -168,7 +168,7 @@ class DependencyTest extends PHPUnit_Framework_TestCase
      */
     public function testDependenciesContainingCallable()
     {
-        $instance = new Dependency(null, 'SimpleWithCallable');
+        $instance = new Dependency(null, '\\SimpleWithCallable');
         $instance->prepare();
 
         $dependencies = $instance->getDependencies();
@@ -208,9 +208,9 @@ class DependencyTest extends PHPUnit_Framework_TestCase
         require_once FIXTURE_PATH . '/simple-classes.php';
 
         return [
-            ['SimpleWithDefault', 'foobar'],
-            ['SimpleWithConstantAsDefault', TEST_CONSTANT],
-            ['BasicCompositeWitDefault', null],
+            ['\\SimpleWithDefault', 'foobar'],
+            ['\\SimpleWithConstantAsDefault', TEST_CONSTANT],
+            ['\\BasicCompositeWitDefault', null],
         ];
     }
 
@@ -229,7 +229,7 @@ class DependencyTest extends PHPUnit_Framework_TestCase
      */
     public function testDependencyWithInterface()
     {
-        $instance = new Dependency(null, 'CompsoteWithInterfaceDependency');
+        $instance = new Dependency(null, '\\CompsoteWithInterfaceDependency');
         $instance->prepare();
 
         $dependencies = $instance->getDependencies();
