@@ -10,9 +10,11 @@ use PHPUnit_Framework_TestCase;
 class DependencyTest extends PHPUnit_Framework_TestCase
 {
 
-    public static function setUpBeforeClass()
+    public function setUp()
     {
         require_once FIXTURE_PATH . '/simple-classes.php';
+        require_once FIXTURE_PATH . '/namespaced-classes.php';
+        require_once FIXTURE_PATH . '/subnamespaced-classes.php';
     }
 
 
@@ -235,5 +237,92 @@ class DependencyTest extends PHPUnit_Framework_TestCase
         $dependencies = $instance->getDependencies();
         $this->assertTrue($dependencies[0]->isObject());
         $this->assertFalse($dependencies[0]->isConcrete());
+    }
+
+    /**
+     * @covers Fracture\Injector\Dependency::__construct
+     * @covers Fracture\Injector\Dependency::prepare
+     * @covers Fracture\Injector\Dependency::initialize
+     * @covers Fracture\Injector\Dependency::collectParameters
+     * @covers Fracture\Injector\Dependency::produceDependencies
+     * @covers Fracture\Injector\Dependency::getDependencies
+     * @covers Fracture\Injector\Dependency::analyse
+     * @covers Fracture\Injector\Dependency::applyContext
+     * @covers Fracture\Injector\Dependency::getName
+     * @covers Fracture\Injector\Dependency::getType
+     */
+    public function testNamespacedBasicClass()
+    {
+        $instance = new Dependency(null, '\\Foobar\\First');
+        $instance->prepare();
+
+        $this->assertEquals('\\Foobar\\First', $instance->getType());
+        $this->assertNull($instance->getName());
+        $this->assertFalse($instance->hasDependencies());
+    }
+
+    /**
+     * @covers Fracture\Injector\Dependency::__construct
+     * @covers Fracture\Injector\Dependency::prepare
+     * @covers Fracture\Injector\Dependency::initialize
+     * @covers Fracture\Injector\Dependency::collectParameters
+     * @covers Fracture\Injector\Dependency::produceDependencies
+     * @covers Fracture\Injector\Dependency::getDependencies
+     * @covers Fracture\Injector\Dependency::analyse
+     * @covers Fracture\Injector\Dependency::applyContext
+     * @covers Fracture\Injector\Dependency::getType
+     */
+    public function testNamespacedComposeteClass()
+    {
+        $instance = new Dependency(null, '\\Foobar\\Second');
+        $instance->prepare();
+
+        $dependencies = $instance->getDependencies();
+        $this->assertEquals('\\Foobar\\First', $dependencies[0]->getType());
+    }
+
+
+    /**
+     * @covers Fracture\Injector\Dependency::__construct
+     * @covers Fracture\Injector\Dependency::prepare
+     * @covers Fracture\Injector\Dependency::initialize
+     * @covers Fracture\Injector\Dependency::collectParameters
+     * @covers Fracture\Injector\Dependency::produceDependencies
+     * @covers Fracture\Injector\Dependency::getDependencies
+     * @covers Fracture\Injector\Dependency::analyse
+     * @covers Fracture\Injector\Dependency::applyContext
+     * @covers Fracture\Injector\Dependency::getType
+     */
+    public function testNamespacedClassWithGlobalDependency()
+    {
+        $instance = new Dependency(null, '\\Foobar\\Third');
+        $instance->prepare();
+
+        $dependencies = $instance->getDependencies();
+        $this->assertEquals('\\BasicComposite', $dependencies[0]->getType());
+    }
+
+    /**
+     * @covers Fracture\Injector\Dependency::__construct
+     * @covers Fracture\Injector\Dependency::prepare
+     * @covers Fracture\Injector\Dependency::initialize
+     * @covers Fracture\Injector\Dependency::collectParameters
+     * @covers Fracture\Injector\Dependency::produceDependencies
+     * @covers Fracture\Injector\Dependency::getDependencies
+     * @covers Fracture\Injector\Dependency::analyse
+     * @covers Fracture\Injector\Dependency::applyContext
+     * @covers Fracture\Injector\Dependency::getType
+     */
+    public function testSubNamespacedClass()
+    {
+        $instance = new Dependency(null, '\\Lorem\\Ipsum\\Dolor');
+        $instance->prepare();
+
+        $dependencies = $instance->getDependencies();
+        $this->assertEquals('\\Foobar\\Second', $dependencies[0]->getType());
+        $this->assertEquals('\\BasicComposite', $dependencies[1]->getType());
+
+        $secondOrder = $dependencies[0]->getDependencies();
+        $this->assertEquals('\\Foobar\\First', $secondOrder[0]->getType());
     }
 }
