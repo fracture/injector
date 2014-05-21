@@ -72,3 +72,8 @@ class BasicCompositeWithStuff
     public function __construct($alpha, array $beta = [], Simple $gamma = null, SomeInterface $delta = null) {}
 }
 
+
+class SimpleWithCallable
+{
+    public function __construct(callable $alpha) {}
+}

@@ -36,6 +36,9 @@ class DependencyTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Fracture\Injector\Dependency::__construct
      * @covers Fracture\Injector\Dependency::prepare
+     * @covers Fracture\Injector\Dependency::initialize
+     * @covers Fracture\Injector\Dependency::collectParameters
+     * @covers Fracture\Injector\Dependency::produceDependencies
      * @covers Fracture\Injector\Dependency::isConcrete
      */
     public function testConcreteValidation()
@@ -53,6 +56,9 @@ class DependencyTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Fracture\Injector\Dependency::__construct
      * @covers Fracture\Injector\Dependency::prepare
+     * @covers Fracture\Injector\Dependency::initialize
+     * @covers Fracture\Injector\Dependency::collectParameters
+     * @covers Fracture\Injector\Dependency::produceDependencies
      * @covers Fracture\Injector\Dependency::hasDependencies
      */
     public function testBasicClass()
@@ -67,6 +73,9 @@ class DependencyTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Fracture\Injector\Dependency::__construct
      * @covers Fracture\Injector\Dependency::prepare
+     * @covers Fracture\Injector\Dependency::initialize
+     * @covers Fracture\Injector\Dependency::collectParameters
+     * @covers Fracture\Injector\Dependency::produceDependencies
      * @covers Fracture\Injector\Dependency::hasDependencies
      */
     public function testSimpleClass()
@@ -81,7 +90,12 @@ class DependencyTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Fracture\Injector\Dependency::__construct
      * @covers Fracture\Injector\Dependency::prepare
+     * @covers Fracture\Injector\Dependency::initialize
+     * @covers Fracture\Injector\Dependency::collectParameters
+     * @covers Fracture\Injector\Dependency::produceDependencies
      * @covers Fracture\Injector\Dependency::getDependencies
+     * @covers Fracture\Injector\Dependency::analyse
+     * @covers Fracture\Injector\Dependency::applyContext
      */
     public function testDependenciesAreArray()
     {
@@ -96,7 +110,12 @@ class DependencyTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Fracture\Injector\Dependency::__construct
      * @covers Fracture\Injector\Dependency::prepare
+     * @covers Fracture\Injector\Dependency::initialize
+     * @covers Fracture\Injector\Dependency::collectParameters
+     * @covers Fracture\Injector\Dependency::produceDependencies
      * @covers Fracture\Injector\Dependency::getDependencies
+     * @covers Fracture\Injector\Dependency::analyse
+     * @covers Fracture\Injector\Dependency::applyContext
      * @covers Fracture\Injector\Dependency::getName
      * @covers Fracture\Injector\Dependency::getType
      */
@@ -119,7 +138,12 @@ class DependencyTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Fracture\Injector\Dependency::__construct
      * @covers Fracture\Injector\Dependency::prepare
+     * @covers Fracture\Injector\Dependency::initialize
+     * @covers Fracture\Injector\Dependency::collectParameters
+     * @covers Fracture\Injector\Dependency::produceDependencies
      * @covers Fracture\Injector\Dependency::getDependencies
+     * @covers Fracture\Injector\Dependency::analyse
+     * @covers Fracture\Injector\Dependency::applyContext
      */
     public function testDependenciesContainingParametersAsDependencies()
     {
@@ -132,12 +156,40 @@ class DependencyTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * @covers Fracture\Injector\Dependency::__construct
+     * @covers Fracture\Injector\Dependency::prepare
+     * @covers Fracture\Injector\Dependency::initialize
+     * @covers Fracture\Injector\Dependency::collectParameters
+     * @covers Fracture\Injector\Dependency::produceDependencies
+     * @covers Fracture\Injector\Dependency::getDependencies
+     * @covers Fracture\Injector\Dependency::analyse
+     * @covers Fracture\Injector\Dependency::applyContext
+     * @covers Fracture\Injector\Dependency::isCallable
+     */
+    public function testDependenciesContainingCallable()
+    {
+        $instance = new Dependency(null, 'SimpleWithCallable');
+        $instance->prepare();
+
+        $dependencies = $instance->getDependencies();
+        $this->assertContainsOnlyInstancesOf('\\Fracture\\Injector\\Dependency', $dependencies);
+        $this->assertTrue($dependencies[0]->isCallable());
+    }
+
+
+    /**
      * @dataProvider provideDependencyWithDefaultValue
      *
      * @covers Fracture\Injector\Dependency::__construct
      * @covers Fracture\Injector\Dependency::prepare
+     * @covers Fracture\Injector\Dependency::initialize
+     * @covers Fracture\Injector\Dependency::collectParameters
+     * @covers Fracture\Injector\Dependency::produceDependencies
      * @covers Fracture\Injector\Dependency::getDependencies
+     * @covers Fracture\Injector\Dependency::analyse
+     * @covers Fracture\Injector\Dependency::applyContext
      * @covers Fracture\Injector\Dependency::hasDefaultValue
+     * @covers Fracture\Injector\Dependency::setDefaultValue
      * @covers Fracture\Injector\Dependency::getDefaultValue
      */
     public function testDependencyWithDefaultValue($class, $value)
@@ -166,9 +218,14 @@ class DependencyTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Fracture\Injector\Dependency::__construct
      * @covers Fracture\Injector\Dependency::prepare
+     * @covers Fracture\Injector\Dependency::initialize
      * @covers Fracture\Injector\Dependency::getDependencies
      * @covers Fracture\Injector\Dependency::isObject
      * @covers Fracture\Injector\Dependency::isConcrete
+     * @covers Fracture\Injector\Dependency::collectParameters
+     * @covers Fracture\Injector\Dependency::produceDependencies
+     * @covers Fracture\Injector\Dependency::analyse
+     * @covers Fracture\Injector\Dependency::applyContext
      */
     public function testDependencyWithInterface()
     {
